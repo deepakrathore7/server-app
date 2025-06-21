@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "restartstage-52df1",
+  "private_key_id": "d52b805115445454554546c13d2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC9Cib1ujZ7mnGv\nmHq+3L0jnmOKcMoItrwwhYdvsMsC5seYhz6L4R3wJcMSRak0MZEnOKrU7Dhr1jW8\nFztxF5CnE5OYzLG7O2FLbSRt6dDnUeMlSb0xs//A3G4uSPIGUWUhWa8aEadPuzQ2zulq2\nGvclsOZlH7QD8iCkKWv9KJ1u0vkHJB6f3PcYUFovRC/vZMJusWSvPeKsx1xuBwKR\nrb0hKJsSpY8n1j99U5+SQbxmyedqmvglrlgPytMkH98vRT69Xcjald6ZiCSvRwo6\nmJ6zzEdLSFWSTey6zxrWLMs=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@restartstage-52df1.iam.gserviceaccount.com",
+  "client_id": "103837116978518247966",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40restartstage-52df1.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
