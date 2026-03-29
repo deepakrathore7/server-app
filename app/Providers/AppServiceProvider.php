@@ -36,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(Validator $validator)
     {
 
+        \Illuminate\Support\Facades\URL::forceScheme('https');
         Inertia::share([
             'app_for' => env('APP_FOR')
         ]);

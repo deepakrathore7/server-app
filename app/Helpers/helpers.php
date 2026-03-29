@@ -10,14 +10,14 @@ use App\Base\SMSTemplate\SMSTemplate;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
+use TarfinLabs\LaravelSpatial\Types\Point;
 use App\Base\Constants\Auth\Role as RoleSlug;
 use App\Base\Services\Setting\SettingContract;
 use App\Helpers\Notification\AdminInformation;
 use App\Base\Services\Hash\HashGeneratorContract;
 use App\Base\Libraries\QueryFilter\FilterContract;
 use App\Base\Services\OTP\Generator\OTPGeneratorContract;
-use Grimzy\LaravelMysqlSpatial\Types\LineString;
+use TarfinLabs\LaravelSpatial\Types\LineString;
 use App\Models\Admin\Zone;
 use App\Models\Admin\Setting;
 use App\Models\Languages;
@@ -725,7 +725,7 @@ if (!function_exists('app_name')) {
     {
         $setting = Setting::whereName('app_name')->first();
 
-        return $setting->value;
+        return $setting ? $setting->value : config('app.name');
     }
 }
 
@@ -1408,7 +1408,7 @@ if (!function_exists('default_language')) {
     {
         $default_language = Languages::where('default_status',1)->first();
 
-        return $default_language;
+        return $default_language ?? (object)['code' => 'en', 'direction' => 'ltr'];
     }
 }
 

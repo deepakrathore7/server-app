@@ -45,7 +45,7 @@ class LandingHomeController extends BaseController
     public function list(QueryFilterContract $queryFilter, Request $request)
     {
         $query = LandingHome::query();
-// dd("ssss");
+
         $results = $queryFilter->builder($query)->paginate();
 
         return response()->json([
@@ -134,13 +134,10 @@ class LandingHomeController extends BaseController
                 ->saveLandingHomeImage();
         }
 
-        // $landingHome->create($created_params);
-
         LandingHome::create($created_params);
 
-        // Optionally, return a response
         return response()->json([
-            'successMessage' => 'Landin Home created successfully.'
+            'successMessage' => 'Landing Home created successfully.'
         ], 201);
     }
     public function edit($id)
@@ -229,10 +226,8 @@ class LandingHomeController extends BaseController
                 ->saveLandingHomeImage();
         }
 
-
         $landingHome->update($updated_params);
 
-        // Optionally, return a response
         return response()->json([
             'successMessage' => 'Home updated successfully.',
             'landingHome' => $landingHome,
@@ -246,106 +241,58 @@ class LandingHomeController extends BaseController
         return response()->json([
             'successMessage' => 'Home deleted successfully',
         ]);
-    }  
-
-
-    // public function homepage( Request $request)
-    // {
-    //     // Get the locale from the request or default to 'en'
-    //     $locale = $request->input('locale', 'en');
-
-    //     // Fetch the data based on the locale
-    //     $landingHome = LandingHome::where('locale', $locale)->first();
-
-    //      // Define the image columns you have
-    //     $imageColumns = ['service_img', 'about_img', 'box_img_1', 'box_img_2', 'box_img_3', 'service_area_img'];
-
-    //     // Construct URLs for each image column
-    //         foreach ($imageColumns as $column) {
-    //             if ($landingHome && $landingHome->$column) {
-    //                 $landingHome->{$column . '_url'} = asset('storage/uploads/website/images/' . $landingHome->$column);
-    //             } else {
-    //                 $landingHome->{$column . '_url'} = null;
-    //             }
-    //         }
-
-    //     // Fetch all unique locales
-    //     $locales = LandingHome::select('locale')->distinct()->get();
-
-    //     return Inertia::render('pages/landing/index', [
-    //         'landingHome' => $landingHome,
-    //         'locales' => $locales,
-    //     ]);
-    // }
-    // {
-    //     // Get the locale from the request, default to 'en'
-    //     $locale = $request->input('locale', 'en');
-
-    //     // Fetch the data based on the locale
-    //     $landingHome = LandingHome::where('locale', $locale)->first();
-
-    //     return Inertia::render('pages/landing/index', [
-    //         'landingHome' => $landingHome,
-    //     ]);
-
-    // }
-    public function homepage(Request $request)
-    {
-
-        
-        // Fetch the default language code where default_status is true
-        $defaultLocale = Languages::where('default_status', true)->value('code') ?? 'en'; // Fallback to 'en' if not found
-        // Use the default locale if none is selected
-        $selectedLocale = $request->input('locale', session('selectedLocale', $defaultLocale));
-        session(['selectedLocale' => $selectedLocale]); // Store in session
-
-        // $selectedLocale = $request->input('locale', session('selectedLocale', 'es')); // default to 'en'
-        // session(['selectedLocale' => $selectedLocale]); // store the selected locale in the session
-        $landingHome = LandingHome::where('locale', $selectedLocale)->orWhere('locale',$defaultLocale)->orWhere('locale','en')->first();
-        $landingHeader = LandingHeader::where('locale', $selectedLocale)->orWhere('locale',$defaultLocale)->orWhere('locale','en')->first();
-        
-    // Check the customization settings toggle status
-    $enableLandingSite = Setting::where('category', 'customization_settings')
-        ->where('name', 'enable_landing_site')
-        ->value('value');
-
-    // if ($enableLandingSite == 0) {
-    //     return redirect()->route('login.admin'); // Replace with the actual route name for redirection
-    // }
-    if ($enableLandingSite == 0) {
-        // Fetch the dynamic redirect value from the settings table
-        $adminRedirect = Setting::where('category', 'general')
-            ->where('name', 'admin_login')
-            ->value('value');
-
-        // Pass the dynamic value to the route
-        return redirect()->route('login.{redirect}', ['redirect' => $adminRedirect]);
     }
 
-         // Define the image columns you have
+    public function homepage(Request $request)
+    {
+        // Fetch the default language code where default_status is true
+        $defaultLocale = Languages::where('default_status', true)->value('code') ?? 'en';
+
+        // Use the default locale if none is selected
+        $selectedLocale = $request->input('locale', session('selectedLocale', $defaultLocale));
+        session(['selectedLocale' => $selectedLocale]);
+
+        $landingHome = LandingHome::where('locale', $selectedLocale)->orWhere('locale', $defaultLocale)->orWhere('locale', 'en')->first();
+        $landingHeader = LandingHeader::where('locale', $selectedLocale)->orWhere('locale', $defaultLocale)->orWhere('locale', 'en')->first();
+
+        // Check the customization settings toggle status
+        $enableLandingSite = Setting::where('category', 'customization_settings')
+            ->where('name', 'enable_landing_site')
+            ->value('value');
+
+        if ($enableLandingSite == 0) {
+            $adminRedirect = Setting::where('category', 'general')
+                ->where('name', 'admin_login')
+                ->value('value') ?? 'admin';
+
+            return redirect()->route('login.' . $adminRedirect);
+        }
+
+        // Define the image columns you have
         $imageColumns = ['service_img', 'about_img', 'box_img_1', 'box_img_2', 'box_img_3', 'service_area_img'];
 
-    //     // Construct URLs for each image column
+        // Construct URLs for each image column
+        if ($landingHome) {
             foreach ($imageColumns as $column) {
-                if ($landingHome && $landingHome->$column) {
+                if ($landingHome->$column) {
                     $landingHome->{$column . '_url'} = asset('storage/uploads/website/images/' . $landingHome->$column);
                 } else {
                     $landingHome->{$column . '_url'} = null;
                 }
             }
-        
+        }
+
         return Inertia::render('pages/landing/index', [
             'landingHome' => $landingHome,
             'landingHeader' => $landingHeader,
             'locales' => $this->getLocales(),
-            'defaultLocale' => $defaultLocale, // Send default locale to Vue
+            'defaultLocale' => $defaultLocale,
             'selectedLocale' => $selectedLocale,
         ]);
     }
-    
+
     private function getLocales()
     {
-        // return LandingHeader::pluck('locale', 'id');
         return LandingHeader::pluck('language', 'locale');
     }
 

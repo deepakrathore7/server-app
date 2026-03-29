@@ -2,12 +2,14 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
         "barryvdh/laravel-dompdf": "^3.0",
-        "grimzy/laravel-mysql-spatial": "dev-l10-compatibility",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.8",
         "intervention/image": "^3.7",
@@ -28,7 +30,8 @@
         "srmklive/paypal": "^3.0",
         "stripe/stripe-php": "^15.7",
         "tanmuhittin/laravel-google-translate": "^2.3",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "tarfin-labs/laravel-spatial": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -87,10 +90,5 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "repositories": {
-        "grimzy/laravel-mysql-spatial": {
-            "type": "git",
-            "url": "https://github.com/joshbaumann/laravel-mysql-spatial.git"
-        }
-    }
+    "repositories": []
 }
