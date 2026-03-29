@@ -1157,9 +1157,10 @@ function get_directions_array($pickup_lat, $pickup_lng, $drop_lat, $drop_lng)
 if (!function_exists('find_peak_zone')) {
     function find_peak_zone($lat, $lng)
     {
-        $point = new Point($lat, $lng);
+        if (!$lat || !$lng) { return null; }
+        $point = new Point((float)$lat, (float)$lng);
 
-        $zone = PeakZone::contains('coordinates', $point)->first();
+        $zone = PeakZone::whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->first();
 
         return $zone;
     }
@@ -1172,9 +1173,10 @@ if (!function_exists('find_peak_zone')) {
 if (!function_exists('find_zone')) {
     function find_zone($lat, $lng)
     {
-        $point = new Point($lat, $lng);
+        if (!$lat || !$lng) { return null; }
+        $point = new Point((float)$lat, (float)$lng);
 
-        $zone = Zone::contains('coordinates', $point)->whereHas('serviceLocation',function($query) {
+        $zone = Zone::whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->whereHas('serviceLocation',function($query) {
             $query->where('active',true);
         })->where('active', 1)->first();
 
@@ -1232,9 +1234,10 @@ if (!function_exists('active_languages')) {
 if (!function_exists('find_airport')) {
     function find_airport($lat, $lng)
     {
-        $point = new Point($lat, $lng);
+        if (!$lat || !$lng) { return null; }
+        $point = new Point((float)$lat, (float)$lng);
 
-        $zone = Airport::companyKey()->contains('coordinates', $point)->where('active', 1)->first();
+        $zone = Airport::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->where('active', 1)->first();
 
         return $zone;
     }

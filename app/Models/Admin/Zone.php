@@ -9,14 +9,13 @@ use App\Models\Traits\HasActive;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasActiveCompanyKey;
 use Nicolaslopezj\Searchable\SearchableTrait;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+// use TarfinLabs\LaravelSpatial\Traits\HasSpatial;
 use App\Models\Admin\Subscription;
 use App\Models\Admin\ZoneTranslations;
 
 class Zone extends Model
 {
     use HasActive, UuidModel,SearchableTrait,HasActiveCompanyKey;
-    use SpatialTrait;
 
     /**
      * The table associated with the model.
@@ -34,9 +33,7 @@ class Zone extends Model
         'service_location_id', 'name','unit','active','coordinates','default_vehicle_type',
         'company_key','lat','lng','default_vehicle_type_for_delivery','for_delivery','maximum_outstation_distance','maximum_distance',
     ];
-    protected $spatialFields = [
-        'coordinates'
-    ];
+    // protected $spatialFields = ['coordinates'];
 
     /**
      * The relationships that can be loaded with query string filtering includes.

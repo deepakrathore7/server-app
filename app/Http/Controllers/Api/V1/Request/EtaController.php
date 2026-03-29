@@ -28,7 +28,7 @@ use App\Transformers\Driver\CategoryTransformer;
 use Illuminate\Support\Facades\Log;
 use App\Models\Request\RecentSearch;
 use App\Transformers\Requests\RecentSearchesTransformer;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
+use TarfinLabs\LaravelSpatial\Types\Point;
 use App\Models\Admin\Zone;
 use App\Jobs\Notifications\SendPushNotification;
 use App\Helpers\Rides\StoreEtaDetailForRideHelper;
@@ -613,7 +613,7 @@ class EtaController extends ApiController
             
             $drop_location = new Point($drop_address['latitude'], $drop_address['longitude']);
 
-            $drop_zone = Zone::contains('coordinates', $drop_location)->whereHas('serviceLocation',function($query) {
+            $drop_zone = Zone::whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$drop_location->toWkt()])->whereHas('serviceLocation',function($query) {
                 $query->where('active',true);
             })->where('active', 1)->where('id',$pick_zone->id)->first();
     

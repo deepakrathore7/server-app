@@ -9,12 +9,11 @@ use App\Models\Traits\HasActive;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasActiveCompanyKey;
 use Nicolaslopezj\Searchable\SearchableTrait;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+// use TarfinLabs\LaravelSpatial\Traits\HasSpatial;
 
 class Airport extends Model
 {
     use HasActive, UuidModel,SearchableTrait,HasActiveCompanyKey;
-    use SpatialTrait;
 
     /**
      * The table associated with the model.
@@ -32,9 +31,7 @@ class Airport extends Model
         'service_location_id', 'name','active','coordinates','company_key','lat','lng','airport_surge_fee'
     ];
 
-    protected $spatialFields = [
-        'coordinates'
-    ];
+    // spatialFields removed
 
     /**
      * The relationships that can be loaded with query string filtering includes.

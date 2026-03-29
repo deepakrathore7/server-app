@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Admin\ServiceLocation;
 use App\Models\Admin\Zone;
-use Grimzy\LaravelMysqlSpatial\Types\Point;
-use Grimzy\LaravelMysqlSpatial\Types\LineString;
-use Grimzy\LaravelMysqlSpatial\Types\Polygon;
+use TarfinLabs\LaravelSpatial\Types\Point;
+use TarfinLabs\LaravelSpatial\Types\LineString;
+use TarfinLabs\LaravelSpatial\Types\Polygon;
 use Illuminate\Validation\ValidationException;
-use Grimzy\LaravelMysqlSpatial\Types\MultiPolygon;
+use TarfinLabs\LaravelSpatial\Types\MultiPolygon;
 use Illuminate\Support\Facades\Log;
 use App\Base\Libraries\QueryFilter\QueryFilterContract;
 use App\Base\Filters\Admin\ZoneFilter;
@@ -96,7 +96,7 @@ class ZoneController extends Controller
 
                     $point = new Point($coordinate[1], $coordinate[0]); // Point(lat, lng)
 
-                    $check_if_exists = Zone::companyKey()->contains('coordinates', $point)->exists();
+                    $check_if_exists = Zone::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->exists();
                     if ($check_if_exists) {
                         throw ValidationException::withMessages(['zone_name' => __('Coordinates already exists with our exists zone')]);
                     }
@@ -223,7 +223,7 @@ class ZoneController extends Controller
 
                     $point = new Point($coordinate[1], $coordinate[0]); // Point(lat, lng)
 
-                    $check_if_exists = Zone::companyKey()->contains('coordinates', $point)->where('id','!=',$zone->id)->exists();
+                    $check_if_exists = Zone::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->where('id','!=',$zone->id)->exists();
                     if ($check_if_exists) {
                         throw ValidationException::withMessages(['zone_name' => __('Coordinates already exists with our exists zone')]);
                     }

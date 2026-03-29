@@ -9,11 +9,11 @@ use App\Models\Traits\HasActive;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\HasActiveCompanyKey;
 use Nicolaslopezj\Searchable\SearchableTrait;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+// use TarfinLabs\LaravelSpatial\Traits\HasSpatial;
 
 class PeakZone extends Model
 {
-    use HasActive, UuidModel,SearchableTrait,HasActiveCompanyKey,SpatialTrait;
+    use HasActive, UuidModel,SearchableTrait,HasActiveCompanyKey;
 
     /**
      * The table associated with the model.
@@ -31,9 +31,7 @@ class PeakZone extends Model
         'zone_id','name','active','coordinates','lat','lng','start_time','end_time','distance_price_percentage'
     ];
 
-    protected $spatialFields = [
-        'coordinates'
-    ];
+    // spatialFields removed
 
     protected $searchable = [
         /**
