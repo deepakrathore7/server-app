@@ -267,7 +267,7 @@ class DispatcherController extends StripeController
             'appId' => $settings['firebase_app_id'],
         ];
         return Inertia::render('dispatch-new/rides_request/index',[
-            'zones' => Zone::active()->get(),
+            'zones' => Zone::active()->select('id','name','unit','active','service_location_id','lat','lng')->get(),
             'types' => VehicleType::active()->get(),
             'ongoing_rides' => $ongoing,
             'firebaseConfig' => $firebaseConfig,
@@ -441,7 +441,7 @@ class DispatcherController extends StripeController
             'appId' => $settings['firebase_app_id'],
         ];
         return Inertia::render('dispatch-new/ongoing_rides/index',[
-            'zones' => Zone::active()->get(),
+            'zones' => Zone::active()->select('id','name','unit','active','service_location_id','lat','lng')->get(),
             'types' => VehicleType::active()->get(),
             'ongoing_rides' => $ongoing,
             'firebaseConfig' => $firebaseConfig,

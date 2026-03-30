@@ -27,6 +27,8 @@ class Airport extends Model
      *
      * @var array
      */
+    protected $hidden = ['coordinates'];
+
     protected $fillable = [
         'service_location_id', 'name','active','coordinates','company_key','lat','lng','airport_surge_fee'
     ];

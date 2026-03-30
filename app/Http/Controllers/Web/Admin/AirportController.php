@@ -12,10 +12,10 @@ use App\Base\Constants\Auth\Role as RoleSlug;
 use App\Base\Exceptions\CustomValidationException;
 use App\Base\Filters\Master\CommonMasterFilter;
 use App\Base\Libraries\QueryFilter\QueryFilterContract;
-use TarfinLabs\LaravelSpatial\Types\Polygon;
+use App\Spatial\Polygon;
 use App\Http\Controllers\Api\V1\BaseController;
-use TarfinLabs\LaravelSpatial\Types\LineString;
-use TarfinLabs\LaravelSpatial\Types\MultiPolygon;
+use App\Spatial\LineString;
+use App\Spatial\MultiPolygon;
 use App\Models\Request\Request;
 use Carbon\Carbon;
 use Illuminate\Http\Request as HttpRequest;
@@ -169,7 +169,7 @@ class AirportController extends BaseController
 
                     $point = new Point($coordinate[1], $coordinate[0]); // Point(lat, lng)
 
-                    $check_if_exists = Airport::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->exists();
+                    $check_if_exists = Airport::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?, 4326))', [$point->toWkt()])->exists();
                     if ($check_if_exists) {
                         throw ValidationException::withMessages(['airport_name' => __('Coordinates already exists with our exists airport')]);
                     }
@@ -259,7 +259,7 @@ class AirportController extends BaseController
 
                     $point = new Point($coordinate[1], $coordinate[0]); // Point(lat, lng)
 
-                    $check_if_exists = Airport::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->where('id','!=',$airport->id)->exists();
+                    $check_if_exists = Airport::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?, 4326))', [$point->toWkt()])->where('id','!=',$airport->id)->exists();
                     if ($check_if_exists) {
                         throw ValidationException::withMessages(['airport_name' => __('Coordinates already exists with our exists airport')]);
                     }

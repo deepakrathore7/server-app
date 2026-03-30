@@ -16,6 +16,7 @@
         "laravel-notification-channels/fcm": "^4.5",
         "laravel/framework": "^10.10",
         "laravel/jetstream": "^4.0",
+        "laravel/passport": "^12.4",
         "laravel/sanctum": "^3.2",
         "laravel/socialite": "^5.15",
         "laravel/tinker": "^2.8",
@@ -30,8 +31,8 @@
         "srmklive/paypal": "^3.0",
         "stripe/stripe-php": "^15.7",
         "tanmuhittin/laravel-google-translate": "^2.3",
-        "tightenco/ziggy": "^1.0",
-        "tarfin-labs/laravel-spatial": "^2.0"
+        "tarfin-labs/laravel-spatial": "^2.0",
+        "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

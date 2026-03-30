@@ -445,8 +445,8 @@ Route::group(['prefix' => 'pending-drivers'], function () {
 Route::group(['prefix' => 'drivers-levelup'], function () {
     // Route::get('/', [DriverManagementController::class, 'driverLevelUpIndex'])->name('driverlevelup.index');     
     Route::get('/list', [DriverManagementController::class, 'driverLevelList'])->name('driverlevelup.list');     
-    Route::get('/{zoneType}', [DriverManagementController::class, 'driverLevelUpIndex'])->name('driverlevelup.index');
-    // Route::get('/list/{zoneType}', [DriverManagementController::class, 'driverLevelList'])->name('driverlevelup.list');
+    Route::get('/{zoneType}', [DriverManagementController::class, 'driverLevelUpIndex'])->name('driverlevelup2.index');
+    // Route::get('/list/{zoneType}', [DriverManagementController::class, 'driverLevelList'])->name('driverlevelup2.list');
     Route::post('/store', [DriverManagementController::class, 'driverLevelStore'])->name('approveddriver.driverLeveStore');
     Route::get('/edit/{level}', [DriverManagementController::class, 'driverLevelEdit'])->name('driverlevelup.edit');
     Route::post('/settingsUpdate', [DriverManagementController::class, 'settingsUpdate'])->name('driverlevelup.settingsUpdate');
@@ -632,7 +632,7 @@ Route::group(['prefix' => 'manage-fleet'], function () {
     Route::get('/document-toggle/{documentId}/{fleetId}/{status}', [ManageFleetController::class, 'approvfleetDocument'])->name('managefleets.approvefleetDocument');
     Route::get('/update-document/{fleetId}', [ManageFleetController::class, 'updateAndApprove']);
     Route::get('/fleet-payment-history/{fleet}', [ManageFleetController::class, 'fleetPaymentHistory'])->name('managefleets.fleetPaymentHistory');
-    Route::get('/documents/{fleet}', [ManageFleetController::class, 'approveDocumentStatus'])->name('approveddriver.approveDocumentStatus');
+    Route::get('/documents/{fleet}', [ManageFleetController::class, 'approveDocumentStatus'])->name('fleet.approveDocumentStatus');
 });
 //fleet drivers
 Route::group(['prefix' => 'fleet-drivers'], function () {
@@ -658,9 +658,9 @@ Route::group(['prefix' => 'fleet-drivers'], function () {
     Route::get('/pending-drivers', [FleetDriverController::class, 'pendingDriverIndex'])->name('pendingdriver.fleetIndex');  
     Route::get('/password/edit/{driver}', [FleetDriverController::class, 'editPassword'])->name('fleet-drivers.password.edit');
     Route::post('/password/update/{driver}', [FleetDriverController::class, 'updatePasswords'])->name('fleet-drivers.password.update'); 
-    Route::post('update/decline/reason', [FleetDriverController::class, 'UpdateDriverDeclineReason'])->name('approveddriver.UpdateDriverDeclineReason');
+    Route::post('update/decline/reason', [FleetDriverController::class, 'UpdateDriverDeclineReason'])->name('fleetdriver.UpdateDriverDeclineReason');
 
-    Route::get('/documents/{driver}', [FleetDriverController::class, 'approveDocumentStatus'])->name('approveddriver.approveDocumentStatus');
+    Route::get('/documents/{driver}', [FleetDriverController::class, 'approveDocumentStatus'])->name('fleetdriver.approveDocumentStatus');
 
     Route::get('/check-mobile/{mobile}', [FleetDriverController::class, 'checkMobileExists']);
     Route::get('/check-email/{email}', [FleetDriverController::class, 'checkEmailExists']);   
@@ -1038,16 +1038,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/history', [UserWebBookingController::class, 'history'])->name('web-booking.history');
     Route::get('/history/view/{requestmodel}', [UserWebBookingController::class, 'viewDetails'])->name('history.viewDetails');
     Route::middleware('remove_empty_query')->get('/webuser/list', [UserWebBookingController::class, 'list'])->name('web-users.list');
-    Route::middleware('remove_empty_query')->get('/create-booking', [UserWebBookingController::class, 'booking'])->name('web-booking.create-booking');
+    Route::middleware('remove_empty_query')->get('/create-booking', [UserWebBookingController::class, 'booking'])->name('web-booking2.create-booking');
     Route::post('/web-create-request',[UserWebBookingController::class,'createRequest']);
 
     Route::get('/get-support', [UserWebBookingController::class, 'getSupport'])->name('web-booking.getSupport');
     Route::middleware('remove_empty_query')->get('/get-support/list', [UserWebBookingController::class, 'supportList'])->name('web-users.supportList');
     Route::get('/create-ticket', [UserWebBookingController::class, 'createTicket'])->name('ticket.createTicket');
     Route::post('/ticket/store', [UserWebBookingController::class, 'store'])->name('ticket.store');
-    Route::get('/ticket/view/{supportTicket}', [UserWebBookingController::class, 'viewTicketDetails'])->name('ticket.viewDetails');
-    Route::post('/ticket/reply/{supportTicket}', [UserWebBookingController::class, 'replyMessage'])->name('ticket.replyMessage');
-    Route::get('/fetch-user', [UserWebBookingController::class, 'fetchUser'])->name('chat.fetchUser');
+    Route::get('/ticket/view/{supportTicket}', [UserWebBookingController::class, 'viewTicketDetails'])->name('ticket2.viewDetails');
+    Route::post('/ticket/reply/{supportTicket}', [UserWebBookingController::class, 'replyMessage'])->name('ticket2.replyMessage');
+    Route::get('/fetch-user', [UserWebBookingController::class, 'fetchUser'])->name('chat2.fetchUser');
 
 });
 

@@ -7,11 +7,12 @@ use Inertia\Inertia;
 use App\Models\Admin\ServiceLocation;
 use App\Models\Admin\Zone;
 use TarfinLabs\LaravelSpatial\Types\Point;
-use TarfinLabs\LaravelSpatial\Types\LineString;
-use TarfinLabs\LaravelSpatial\Types\Polygon;
+use App\Spatial\LineString;
+use App\Spatial\Polygon;
 use Illuminate\Validation\ValidationException;
-use TarfinLabs\LaravelSpatial\Types\MultiPolygon;
+use App\Spatial\MultiPolygon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 use App\Base\Libraries\QueryFilter\QueryFilterContract;
 use App\Base\Filters\Admin\ZoneFilter;
 
@@ -24,7 +25,7 @@ class ZoneController extends Controller
     }
     public function fetch(QueryFilterContract $queryFilter)
     {
-        $query = Zone::query();
+        $query = Zone::select('id','name','unit','active','service_location_id','lat','lng','company_key','default_vehicle_type','created_at','updated_at');
 
         $results = $queryFilter->builder($query)->customFilter(new ZoneFilter)->paginate();
 
@@ -96,7 +97,7 @@ class ZoneController extends Controller
 
                     $point = new Point($coordinate[1], $coordinate[0]); // Point(lat, lng)
 
-                    $check_if_exists = Zone::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->exists();
+                    $check_if_exists = Zone::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?, 4326))', [$point->toWkt()])->exists();
                     if ($check_if_exists) {
                         throw ValidationException::withMessages(['zone_name' => __('Coordinates already exists with our exists zone')]);
                     }
@@ -117,7 +118,7 @@ class ZoneController extends Controller
 
         $multi_polygon = new MultiPolygon($set);
 
-        $created_params['coordinates'] = $multi_polygon;
+        $created_params['coordinates'] = \DB::raw("ST_GeomFromText('" . $multi_polygon->toWkt() . "', 4326)");
 
 
         $created_params['name'] = $validated['languageFields']['en'];
@@ -223,7 +224,7 @@ class ZoneController extends Controller
 
                     $point = new Point($coordinate[1], $coordinate[0]); // Point(lat, lng)
 
-                    $check_if_exists = Zone::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->where('id','!=',$zone->id)->exists();
+                    $check_if_exists = Zone::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?, 4326))', [$point->toWkt()])->where('id','!=',$zone->id)->exists();
                     if ($check_if_exists) {
                         throw ValidationException::withMessages(['zone_name' => __('Coordinates already exists with our exists zone')]);
                     }
@@ -248,7 +249,7 @@ class ZoneController extends Controller
 
         // Update additional parameters
         $updated_params['name'] = $validated['languageFields']['en'];
-        $updated_params['coordinates'] = $multi_polygon;
+        $updated_params['coordinates'] = \DB::raw("ST_GeomFromText('" . $multi_polygon->toWkt() . "', 4326)");
         // Update New translated names
         $zone->zoneTranslationWords()->delete();
         foreach ($validated['languageFields'] as $code => $language) {

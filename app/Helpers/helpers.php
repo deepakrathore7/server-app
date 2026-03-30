@@ -17,7 +17,7 @@ use App\Helpers\Notification\AdminInformation;
 use App\Base\Services\Hash\HashGeneratorContract;
 use App\Base\Libraries\QueryFilter\FilterContract;
 use App\Base\Services\OTP\Generator\OTPGeneratorContract;
-use TarfinLabs\LaravelSpatial\Types\LineString;
+use App\Spatial\LineString;
 use App\Models\Admin\Zone;
 use App\Models\Admin\Setting;
 use App\Models\Languages;
@@ -1160,7 +1160,7 @@ if (!function_exists('find_peak_zone')) {
         if (!$lat || !$lng) { return null; }
         $point = new Point((float)$lat, (float)$lng);
 
-        $zone = PeakZone::whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->first();
+        $zone = PeakZone::whereRaw('ST_Contains(coordinates, ST_GeomFromText(?, 4326))', [$point->toWkt()])->first();
 
         return $zone;
     }
@@ -1176,7 +1176,7 @@ if (!function_exists('find_zone')) {
         if (!$lat || !$lng) { return null; }
         $point = new Point((float)$lat, (float)$lng);
 
-        $zone = Zone::whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->whereHas('serviceLocation',function($query) {
+        $zone = Zone::whereRaw('ST_Contains(coordinates, ST_GeomFromText(?, 4326))', [$point->toWkt()])->whereHas('serviceLocation',function($query) {
             $query->where('active',true);
         })->where('active', 1)->first();
 
@@ -1237,7 +1237,7 @@ if (!function_exists('find_airport')) {
         if (!$lat || !$lng) { return null; }
         $point = new Point((float)$lat, (float)$lng);
 
-        $zone = Airport::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?))', [$point->toWkt()])->where('active', 1)->first();
+        $zone = Airport::companyKey()->whereRaw('ST_Contains(coordinates, ST_GeomFromText(?, 4326))', [$point->toWkt()])->where('active', 1)->first();
 
         return $zone;
     }

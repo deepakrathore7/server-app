@@ -29,6 +29,8 @@ class Zone extends Model
      *
      * @var array
      */
+    protected $hidden = ['coordinates'];
+
     protected $fillable = [
         'service_location_id', 'name','unit','active','coordinates','default_vehicle_type',
         'company_key','lat','lng','default_vehicle_type_for_delivery','for_delivery','maximum_outstation_distance','maximum_distance',

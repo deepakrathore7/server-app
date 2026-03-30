@@ -37,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
     {
 
         \Illuminate\Support\Facades\URL::forceScheme('https');
+        \Illuminate\Support\Facades\URL::forceScheme('https');
         Inertia::share([
             'app_for' => env('APP_FOR')
         ]);

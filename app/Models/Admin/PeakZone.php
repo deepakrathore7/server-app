@@ -27,6 +27,8 @@ class PeakZone extends Model
      *
      * @var array
      */
+    protected $hidden = ['coordinates'];
+
     protected $fillable = [
         'zone_id','name','active','coordinates','lat','lng','start_time','end_time','distance_price_percentage'
     ];

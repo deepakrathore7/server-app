@@ -44,7 +44,7 @@ class DeliveryRequestController extends Controller
             'appId' => $settings['firebase_app_id'],
         ];
         return Inertia::render('pages/delivery_rides_request/index',[
-            'zones' => Zone::active()->get(),
+            'zones' => Zone::active()->select('id','name','unit','active','service_location_id','lat','lng')->get(),
             'types' => VehicleType::active()->get(),
             'ongoing_rides' => $ongoing,
             'firebaseConfig' => $firebaseConfig,

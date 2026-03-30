@@ -17,17 +17,17 @@ const files = import.meta.glob('/lang/*/*.json', { eager: false });
 
 async function loadLocaleMessages(locale) {
   try {
-    const errorMessagesResponse = await fetch(`/lang/${locale}/error_messages.json`);
+    const errorMessagesResponse = await fetch(`/server-app/public/lang/${locale}/error_messages.json`);
     const errorMessages = await errorMessagesResponse.json();
-    const pagesNamesResponse = await fetch(`/lang/${locale}/pages_names.json`);
+    const pagesNamesResponse = await fetch(`/server-app/public/lang/${locale}/pages_names.json`);
     const pagesNames = await pagesNamesResponse.json();
-    const successMessagesResponse = await fetch(`/lang/${locale}/success_messages.json`);
+    const successMessagesResponse = await fetch(`/server-app/public/lang/${locale}/success_messages.json`);
     const successMessages = await successMessagesResponse.json();
-    const viewPages_1Response = await fetch(`/lang/${locale}/view_pages_1.json`);
+    const viewPages_1Response = await fetch(`/server-app/public/lang/${locale}/view_pages_1.json`);
     const viewPages_1 = await viewPages_1Response.json();
-    const viewPages_2Response = await fetch(`/lang/${locale}/view_pages_2.json`);
+    const viewPages_2Response = await fetch(`/server-app/public/lang/${locale}/view_pages_2.json`);
     const viewPages_2 = await viewPages_2Response.json();
-    const viewPages_3Response = await fetch(`/lang/${locale}/view_pages_3.json`);
+    const viewPages_3Response = await fetch(`/server-app/public/lang/${locale}/view_pages_3.json`);
     const viewPages_3 = await viewPages_3Response.json();
 
     // ... fetch other files similarly
