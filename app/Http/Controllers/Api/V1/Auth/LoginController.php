@@ -430,10 +430,11 @@ public function mobileOtp(Request $request)
         $postData = [
             "template_id" => $template_id,
             "short_url" => "0",
+            "sender" => "JMK",
             "recipients" => [
                 [
                     "mobiles" => $mobile,
-                    "var" => $otp  // Ensure 'var' matches the placeholder in the template
+                    "OTP" => (string)$otp
                 ]
             ]
         ];

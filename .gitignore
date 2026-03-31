@@ -19,3 +19,5 @@ yarn-error.log
 /.vscode
 package-lock.json
 
+public/push-configurations/firebase.json
+worker.log

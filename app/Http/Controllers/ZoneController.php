@@ -154,6 +154,28 @@ class ZoneController extends Controller
         }
         $zone->languageFields = $languageFields ?? null;
 
+        // Get coordinates as GeoJSON
+        $coordsArray = [];
+        $geoResult = \DB::selectOne(
+            'SELECT ST_AsGeoJSON(coordinates) as geojson FROM zones WHERE id = ?',
+            [$zone->id]
+        );
+        if ($geoResult && $geoResult->geojson) {
+            $geoJson = json_decode($geoResult->geojson, true);
+            if (isset($geoJson['coordinates'])) {
+                foreach ($geoJson['coordinates'] as $polygon) {
+                    $rings = [];
+                    foreach ($polygon as $ring) {
+                        $points = [];
+                        foreach ($ring as $point) {
+                            $points[] = ['coordinates' => [$point[1], $point[0]]];
+                        }
+                        $rings[] = $points;
+                    }
+                    $coordsArray[] = $rings;
+                }
+            }
+        }
                 // dd($zone->coordinates);
                 $map_type = get_map_settings('map_type');
 
@@ -164,14 +186,16 @@ class ZoneController extends Controller
                     'default_lng'=>get_settings('default_longitude'),
                     ]);
 
-                }else{
-               return inertia('pages/zone/edit',['zone' => $zone,
-               'default_lat'=>get_settings('default_latitude'),
-               'default_lng'=>get_settings('default_longitude'),
-               'googleMapKey' => $googleMapKey,'app_for'=>env('APP_FOR'),]);
-
+                } else {
+                    return inertia('pages/zone/edit', [
+                        'zone' => $zone,
+                        'zone_coordinates' => $coordsArray,
+                        'default_lat' => get_settings('default_latitude'),
+                        'default_lng' => get_settings('default_longitude'),
+                        'googleMapKey' => $googleMapKey,
+                        'app_for' => env('APP_FOR'),
+                    ]);
                 }
-
 
     } 
     public function update(Request $request, Zone $zone)

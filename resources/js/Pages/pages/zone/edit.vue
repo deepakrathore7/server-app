@@ -16,6 +16,7 @@ export default {
     },
     props: {
         zone: Object, // Passed from controller
+        zone_coordinates: Array, // Coordinates passed separately
         googleMapKey: String, // Define the googleMapKey prop
         successMessage: String,
         languages: Array,
@@ -23,7 +24,7 @@ export default {
         app_for: String,
     },
     setup(props) {
-        const { zone, googleMapKey } = props;
+        const { zone, googleMapKey, zone_coordinates } = props;
         const { t } = useI18n();
         const { languages, fetchData } = useSharedState(); // Destructure the shared state
         const activeTab = ref('English');
@@ -128,7 +129,8 @@ export default {
             })
         }
         const initializeMap = () => {
-            if (zone && zone.coordinates) {
+            const zoneCoords = zone_coordinates || zone.coordinates;
+            if (zone && zoneCoords) {
                 map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: 0, lng: 0 },
                     zoom: 10,
@@ -136,7 +138,7 @@ export default {
 
                 // Adjust map center and zoom to fit the polygon
                 const bounds = new google.maps.LatLngBounds();
-                zone.coordinates.forEach((polygon) => {
+                zoneCoords.forEach((polygon) => {
 
                 const polygonCoordinates = polygon[0].map(point => ({
                     lat: point.coordinates[1], // Latitude
